@@ -7,6 +7,7 @@ import argparse
 import attr
 import natnet
 
+"""
 @attr.s
 class ClientApp(object):
     _client = attr.ib()
@@ -39,6 +40,7 @@ def main():
         print('Error:', e)
 if __name__ == '__main__':
     main()
+"""
 
 """
 @attr.s
@@ -129,4 +131,109 @@ def main():
         print('Error:', e)
 if __name__ == '__main__':
     main()
-""""
+"""
+
+"""
+@attr.s
+class ClientApp(object):
+    _client = attr.ib()
+    _quiet = attr.ib()
+    _retPos = attr.ib(default=None)
+    @classmethod
+    def connect(cls, server_name, rate, quiet):
+        client = natnet.Client.connect(server_name)
+        if client is None:
+            return None
+        app = cls(client, quiet)
+        app.run
+        while app._retPos is None:
+            print("TRYING AGAIN") #DEBUGGING
+            app.run()
+        print("RETURNING POSITION") #DEBUGGING
+        print(app._retPos) #DEBUGGING
+        return app._retPos
+    def run(self):
+        self._client.set_callback(self.callback)
+    def callback(self, rigid_bodies, markers, timing):
+        if rigid_bodies:
+            for body in rigid_bodies: 
+                if body.id_==60:
+                    bodyPos = body.position
+                    self._retPos = bodyPos
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--server', help='Will autodiscover if not supplied')
+    parser.add_argument('--rate', type=float, default=10, help='Rate at which to produce fake data (Hz)')
+    parser.add_argument('--quiet', action='store_true')
+    args = parser.parse_args()
+    try:
+        pos = ClientApp.connect(args.server, args.rate, args.quiet)
+        print(pos)
+    except natnet.DiscoveryError as e:
+        print('Error:', e)
+if __name__ == '__main__':
+    main()
+"""
+
+"""
+import sys
+@attr.s
+class ClientApp(object):
+    _client = attr.ib()
+    _quiet = attr.ib()
+    @classmethod
+    def connect(cls, server_name, rate, quiet):
+        client = natnet.Client.connect(server_name)
+        if client is None:
+            return None
+        return cls(client, quiet)
+    def run(self):
+        self._client.set_callback(self.callback)
+        self._client.spin() # spin(timeout=None) Continuously receive and process messages
+    def callback(self, rigid_bodies, markers, timing):
+        if rigid_bodies:
+            for body in rigid_bodies: 
+                if body.id_==60:
+                    bodyPos = body.position
+                    if bodyPos is not None:
+                        sys.exit(bodyPos)                 
+# def main():
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument('--server', help='Will autodiscover if not supplied')
+#     parser.add_argument('--rate', type=float, default=10, help='Rate at which to produce fake data (Hz)')
+#     parser.add_argument('--quiet', action='store_true')
+#     args = parser.parse_args()
+#     try:
+#         app = ClientApp.connect(args.server, args.rate, args.quiet)
+#         app.run()
+#     except natnet.DiscoveryError as e:
+#         print('Error:', e)
+# if __name__ == '__main__':
+#     main()
+"""
+
+import sys
+@attr.s
+class ClientApp(object):
+    _client = attr.ib()
+    _quiet = attr.ib()
+    @classmethod
+    def connect(cls, server_name, rate, quiet):
+        client = natnet.Client.connect(server_name)
+        if client is None:
+            return None
+        app = cls(client, quiet)
+        app.run()
+    def run(self):
+        self._client.set_callback(self.callback)
+        self._client.spin
+    def callback(self, rigid_bodies, markers, timing):
+        if rigid_bodies:
+            for body in rigid_bodies: 
+                if body.id_==60:
+                    bodyPos = body.position
+                    if bodyPos is not None:
+                        print('hello')
+                        with open('data.txt', 'w') as data:
+                            data.write(bodyPos)
+                        sys.exit() 

@@ -41,9 +41,11 @@ def main():
     args = parser.parse_args()
     try:
         ClientApp.connect(args.server, args.rate, args.quiet)
-        file = open('data.txt', 'r')
-        data = file.read()
-        print(data)
+        #with open('data.txt', 'r') as data:
+            #print(data.read())
+        data = open('data.txt')
+        pos = data.read()
+        print(pos)
     except natnet.DiscoveryError as e:
         print('Error:', e)
 if __name__ == '__main__':

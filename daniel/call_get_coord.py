@@ -42,7 +42,7 @@ def main():
     try:
         ClientApp.connect(args.server, args.rate, args.quiet)
         with open('data.txt', 'r') as data:
-            coordinates = data.read().strip().split(',')
+            coordinates = data.read().strip().split('\n')
             x, y, z = float(coordinates[0]), float(coordinates[1]), float(coordinates[2])
             print(f"x:{x} y:{y} z:{z}")
         #data = open('data.txt')

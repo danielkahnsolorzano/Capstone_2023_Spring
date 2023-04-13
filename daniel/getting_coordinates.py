@@ -213,6 +213,7 @@ class ClientApp(object):
 """
 
 import sys
+import numpy as np
 @attr.s
 class ClientApp(object):
     _client = attr.ib()
@@ -226,7 +227,7 @@ class ClientApp(object):
         app.run()
     def run(self):
         self._client.set_callback(self.callback)
-        self._client.spin
+        self._client.spin() # spin(timeout=None) Continuously receive and process messages
     def callback(self, rigid_bodies, markers, timing):
         if rigid_bodies:
             for body in rigid_bodies: 
@@ -234,6 +235,5 @@ class ClientApp(object):
                     bodyPos = body.position
                     if bodyPos is not None:
                         print('hello')
-                        with open('data.txt', 'w') as data:
-                            data.write(bodyPos)
+                        np.savetxt('data.txt', np.array(bodyPos))
                         sys.exit() 

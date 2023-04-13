@@ -1,4 +1,4 @@
-from getting_coordinates import ClientApp
+from get_coord import ClientApp
 import argparse
 
 """
@@ -43,8 +43,8 @@ def main():
         ClientApp.connect(args.server, args.rate, args.quiet)
         #with open('data.txt', 'r') as data:
             #print(data.read())
-        data = open('data.txt')
-        pos = data.read()
+        #data = open('data.txt')
+        #pos = data.read()
         print(pos)
     except natnet.DiscoveryError as e:
         print('Error:', e)

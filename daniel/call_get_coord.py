@@ -47,7 +47,7 @@ def main():
             print(f"x:{x} y:{y} z:{z}")
         #data = open('data.txt')
         #pos = data.read()
-        print(pos)
+        #print(pos)
     except natnet.DiscoveryError as e:
         print('Error:', e)
 if __name__ == '__main__':

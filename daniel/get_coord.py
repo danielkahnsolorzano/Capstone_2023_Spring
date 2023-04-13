@@ -234,6 +234,5 @@ class ClientApp(object):
                 if body.id_==60:
                     bodyPos = body.position
                     if bodyPos is not None:
-                        print('hello')
                         np.savetxt('data.txt', np.array(bodyPos))
                         sys.exit() 

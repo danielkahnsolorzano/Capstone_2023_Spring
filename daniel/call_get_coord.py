@@ -45,9 +45,6 @@ def main():
             coordinates = data.read().strip().split('\n')
             x, y, z = float(coordinates[0]), float(coordinates[1]), float(coordinates[2])
             print(f"x:{x} y:{y} z:{z}")
-        #data = open('data.txt')
-        #pos = data.read()
-        #print(pos)
     except natnet.DiscoveryError as e:
         print('Error:', e)
 if __name__ == '__main__':

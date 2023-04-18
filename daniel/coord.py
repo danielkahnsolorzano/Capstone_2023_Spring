@@ -10,7 +10,7 @@ def callback(timestamp, rigid_bodies, markers, force_plates):
             position = body.position
             print(f"Position: ({position[0]}, {position[1]}, {position[2]})")
 
-client = pynatnet.connect("127.0.0.1", "127.0.0.1")
+client = pynatnet.connect()
 client.set_callback(callback)
 
 while True:

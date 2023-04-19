@@ -1,9 +1,9 @@
-from get_coord import ClientApp
 import argparse
 import attr
 import natnet
 import sys
 import numpy as np
+import time
 
 @attr.s
 class ClientApp(object):
@@ -18,15 +18,16 @@ class ClientApp(object):
         app.run()
     def run(self):
         self._client.set_callback(self.callback)
-        self._client.spin(timeout=5) # spin(timeout=None) Continuously receive and process messages
+        self._client.spin() # spin(timeout=None) Continuously receive and process messages
     def callback(self, rigid_bodies, markers, timing):
         if rigid_bodies:
             for body in rigid_bodies: 
                 if body.id_==60:
                     bodyPos = body.position
+                    print(bodyPos)
                     if bodyPos is not None:
-                        with open('data.txt', 'a') as f:
-                          np.savetxt(f, np.array(bodyPos)[None], header=None)
+                        with open('data.txt', 'a') as dataFile:
+                          np.savetxt(dataFile, np.array(bodyPos))
 
 def main():
     parser = argparse.ArgumentParser()
@@ -36,10 +37,6 @@ def main():
     args = parser.parse_args()
     try:
         ClientApp.connect(args.server, args.rate, args.quiet)
-        with open('data.txt', 'r') as data:
-            coordinates = data.read().strip().split('\n')
-            x, y, z = float(coordinates[0]), float(coordinates[1]), float(coordinates[2])
-            print(f"x:{x} y:{y} z:{z}")
     except natnet.DiscoveryError as e:
         print('Error:', e)
 if __name__ == '__main__':
